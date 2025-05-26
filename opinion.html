@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opiniones - IceCold</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./estilo.css">
+    <style>
+        /* Estilos para la sección de opiniones */
+        .formulario-opinion {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .campo-formulario {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .etiqueta-formulario {
+            color: #1a2a6c;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+
+        .input-formulario, .textarea-formulario {
+            padding: 0.8rem;
+            border: 2px solid #e0e4ff;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-formulario:focus, .textarea-formulario:focus {
+            border-color: #1a2a6c;
+            outline: none;
+        }
+
+        .textarea-formulario {
+            resize: vertical;
+        }
+
+        .boton-enviar {
+            background-color: #1a2a6c;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .boton-enviar:hover {
+            background-color: #0d1b47;
+        }
+
+        .lista-opiniones {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .opinion-item {
+            background-color: #f8faff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #1a2a6c;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .opinion-cabecera {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .opinion-nombre {
+            font-family: 'Fredoka One', cursive;
+            color: #1a2a6c;
+            font-size: 1.1rem;
+        }
+
+        .opinion-fecha {
+            color: #5a6a9a;
+            font-size: 0.9rem;
+        }
+
+        .opinion-puntuacion {
+            margin-left: auto;
+            color: #f1c40f;
+        }
+
+        .opinion-texto {
+            color: #3a4a85;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav__container">
+            <figure class="nav_figure">
+                <img src="./Assests/Logo.svg" class="nav_logo">
+            </figure>
+            <label class="nav__toggle">
+                <input type="checkbox" id="menu-input" class="nav__input">
+            </label>
+            <ul class="nav__list">
+                <li class="nav___item"><a href="Inicio.html" class="nav__link">Inicio</a></li>
+                
+                <!-- Resto de tus enlaces de navegación -->
+            </ul>
+        </div>
+    </nav>
+
+    <main class="seccion-principal">
+        <h1 class="titulo-principal">Opiniones de Nuestros Clientes</h1>
+        
+        <section class="contorno-moderno">
+            <h2 class="subtitulo">Comparte tu Experiencia</h2>
+            
+            <form id="formulario-opinion" class="formulario-opinion">
+                <div class="campo-formulario">
+                    <label for="nombre" class="etiqueta-formulario">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" class="input-formulario" required>
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="email" class="etiqueta-formulario">Email:</label>
+                    <input type="email" id="email" name="email" class="input-formulario" required>
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="puntuacion" class="etiqueta-formulario">Puntuación:</label>
+                    <select id="puntuacion" name="puntuacion" class="input-formulario" required>
+                        <option value="">Selecciona...</option>
+                        <option value="5">⭐️⭐️⭐️⭐️⭐️ (5/5)</option>
+                        <option value="4">⭐️⭐️⭐️⭐️ (4/5)</option>
+                        <option value="3">⭐️⭐️⭐️ (3/5)</option>
+                        <option value="2">⭐️⭐️ (2/5)</option>
+                        <option value="1">⭐️ (1/5)</option>
+                    </select>
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="opinion" class="etiqueta-formulario">Tu opinión:</label>
+                    <textarea id="opinion" name="opinion" class="textarea-formulario" rows="5" required></textarea>
+                </div>
+                
+                <button type="submit" class="boton-enviar">Enviar Opinión</button>
+            </form>
+        </section>
+        
+        <section class="contorno-moderno">
+            <h2 class="subtitulo">Opiniones Recientes</h2>
+            
+            <div id="lista-opiniones" class="lista-opiniones">
+                <!-- Las opiniones se cargarán aquí automáticamente -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar opiniones al iniciar
+            cargarOpiniones();
+            
+            // Manejar el envío del formulario
+            document.getElementById('formulario-opinion').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const nombre = document.getElementById('nombre').value;
+                const email = document.getElementById('email').value;
+                const puntuacion = document.getElementById('puntuacion').value;
+                const opinion = document.getElementById('opinion').value;
+                const fecha = new Date().toLocaleDateString('es-ES');
+                
+                if (nombre && email && puntuacion && opinion) {
+                    // Crear objeto de opinión
+                    const nuevaOpinion = {
+                        nombre,
+                        email,
+                        puntuacion,
+                        opinion,
+                        fecha
+                    };
+                    
+                    // Guardar en localStorage
+                    guardarOpinion(nuevaOpinion);
+                    
+                    // Mostrar la nueva opinión
+                    agregarOpinionALista(nuevaOpinion);
+                    
+                    // Limpiar formulario
+                    this.reset();
+                    
+                    // Mostrar mensaje de éxito
+                    alert('¡Gracias por tu opinión!');
+                }
+            });
+        });
+        
+        function guardarOpinion(opinion) {
+            let opiniones = JSON.parse(localStorage.getItem('opinionesIceCold')) || [];
+            opiniones.unshift(opinion); // Agregar al inicio del array
+            localStorage.setItem('opinionesIceCold', JSON.stringify(opiniones));
+        }
+        
+        function cargarOpiniones() {
+            const opiniones = JSON.parse(localStorage.getItem('opinionesIceCold')) || [];
+            const lista = document.getElementById('lista-opiniones');
+            
+            // Limpiar lista primero
+            lista.innerHTML = '';
+            
+            // Mostrar cada opinión
+            opiniones.forEach(opinion => {
+                agregarOpinionALista(opinion);
+            });
+            
+            // Si no hay opiniones, mostrar mensaje
+            if (opiniones.length === 0) {
+                lista.innerHTML = '<p class="opinion-texto">Aún no hay opiniones. ¡Sé el primero en compartir tu experiencia!</p>';
+            }
+        }
+        
+        function agregarOpinionALista(opinion) {
+            const lista = document.getElementById('lista-opiniones');
+            
+            // Crear elemento de opinión
+            const opinionElement = document.createElement('div');
+            opinionElement.className = 'opinion-item';
+            
+            // Convertir puntuación numérica a estrellas
+            const estrellas = '⭐️'.repeat(opinion.puntuacion);
+            
+            opinionElement.innerHTML = `
+                <div class="opinion-cabecera">
+                    <span class="opinion-nombre">${opinion.nombre}</span>
+                    <span class="opinion-fecha">${opinion.fecha}</span>
+                    <span class="opinion-puntuacion">${estrellas}</span>
+                </div>
+                <p class="opinion-texto">${opinion.opinion}</p>
+            `;
+            
+            // Agregar al inicio de la lista
+            if (lista.firstChild) {
+                lista.insertBefore(opinionElement, lista.firstChild);
+            } else {
+                lista.appendChild(opinionElement);
+            }
+        }
+    </script>
+</body>
+</html>

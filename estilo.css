@@ -626,6 +626,115 @@ body {
     color: #1a2a6c;
 }
 
+/* Estilos para los enlaces en las referencias */
+.referencias-apa a {
+    color: #1a2a6c;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.referencias-apa a:hover {
+    color: #b21f1f;
+    text-decoration: underline;
+}
+
+
+/* Estilos para la sección de opiniones */
+.formulario-opinion {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.campo-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.etiqueta-formulario {
+    color: #1a2a6c;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.input-formulario, .textarea-formulario {
+    padding: 0.8rem;
+    border: 2px solid #e0e4ff;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.input-formulario:focus, .textarea-formulario:focus {
+    border-color: #1a2a6c;
+    outline: none;
+}
+
+.textarea-formulario {
+    resize: vertical;
+}
+
+.boton-enviar {
+    background-color: #1a2a6c;
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.boton-enviar:hover {
+    background-color: #0d1b47;
+}
+
+.lista-opiniones {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.opinion-item {
+    background-color: #f8faff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #1a2a6c;
+}
+
+.opinion-cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.opinion-nombre {
+    font-family: 'Fredoka One', cursive;
+    color: #1a2a6c;
+    font-size: 1.1rem;
+}
+
+.opinion-fecha {
+    color: #5a6a9a;
+    font-size: 0.9rem;
+}
+
+.opinion-puntuacion {
+    margin-left: auto;
+    color: #f1c40f;
+}
+
+.opinion-texto {
+    color: #3a4a85;
+    line-height: 1.6;
+}
+
+
 @media (max-width: 768px) {
     .galeria-algoritmica {
         grid-template-columns: 1fr;
