@@ -8,6 +8,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./estilo.css">
+ <!-- ... otros elementos ... -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+
     <style>
         /* Estilos para la sección de opiniones */
         .formulario-opinion {
@@ -174,97 +178,89 @@
             </div>
         </section>
     </main>
+<script>
+    // Configuración de Firebase (usa tus propios valores)
+    const firebaseConfig = {
+        apiKey: "AIzaSyDVxErF5ITmreDXnPPeMln8Ibvn5B3-RMk",
+        authDomain: "ice-cold-82fcf.firebaseapp.com",
+        databaseURL: "https://ice-cold-82fcf-default-rtdb.firebaseio.com",
+        projectId: "ice-cold-82fcf",
+        storageBucket: "ice-cold-82fcf.firebasestorage.app",
+        messagingSenderId: "322524641526",
+        appId: "1:322524641526:web:90e22b109c9f60bb8d94d7",
+        measurementId: "G-75M8K74FJZ"
+    };
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Cargar opiniones al iniciar
-            cargarOpiniones();
+    // Inicializa Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarOpiniones();
+        
+        document.getElementById('formulario-opinion').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            // Manejar el envío del formulario
-            document.getElementById('formulario-opinion').addEventListener('submit', function(e) {
-                e.preventDefault();
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const puntuacion = document.getElementById('puntuacion').value;
+            const opinion = document.getElementById('opinion').value;
+            const fecha = new Date().toLocaleDateString('es-ES');
+            
+            if (nombre && email && puntuacion && opinion) {
+                const nuevaOpinion = {
+                    nombre,
+                    email,
+                    puntuacion,
+                    opinion,
+                    fecha
+                };
                 
-                const nombre = document.getElementById('nombre').value;
-                const email = document.getElementById('email').value;
-                const puntuacion = document.getElementById('puntuacion').value;
-                const opinion = document.getElementById('opinion').value;
-                const fecha = new Date().toLocaleDateString('es-ES');
-                
-                if (nombre && email && puntuacion && opinion) {
-                    // Crear objeto de opinión
-                    const nuevaOpinion = {
-                        nombre,
-                        email,
-                        puntuacion,
-                        opinion,
-                        fecha
-                    };
-                    
-                    // Guardar en localStorage
-                    guardarOpinion(nuevaOpinion);
-                    
-                    // Mostrar la nueva opinión
-                    agregarOpinionALista(nuevaOpinion);
-                    
-                    // Limpiar formulario
-                    this.reset();
-                    
-                    // Mostrar mensaje de éxito
-                    alert('¡Gracias por tu opinión!');
-                }
-            });
+                guardarOpinion(nuevaOpinion);
+                this.reset();
+                alert('¡Gracias por tu opinión!');
+            }
         });
-        
-        function guardarOpinion(opinion) {
-            let opiniones = JSON.parse(localStorage.getItem('opinionesIceCold')) || [];
-            opiniones.unshift(opinion); // Agregar al inicio del array
-            localStorage.setItem('opinionesIceCold', JSON.stringify(opiniones));
-        }
-        
-        function cargarOpiniones() {
-            const opiniones = JSON.parse(localStorage.getItem('opinionesIceCold')) || [];
-            const lista = document.getElementById('lista-opiniones');
-            
-            // Limpiar lista primero
+    });
+    
+    function guardarOpinion(opinion) {
+        database.ref('opiniones/').push(opinion)
+            .catch(error => console.error("Error al guardar:", error));
+    }
+    
+    function cargarOpiniones() {
+        const lista = document.getElementById('lista-opiniones');
+        lista.innerHTML = '<p>Cargando opiniones... ⏳</p>';
+
+        database.ref('opiniones/').orderByChild('fecha').once('value', (snapshot) => {
             lista.innerHTML = '';
             
-            // Mostrar cada opinión
-            opiniones.forEach(opinion => {
-                agregarOpinionALista(opinion);
-            });
-            
-            // Si no hay opiniones, mostrar mensaje
-            if (opiniones.length === 0) {
+            if (!snapshot.exists()) {
                 lista.innerHTML = '<p class="opinion-texto">Aún no hay opiniones. ¡Sé el primero en compartir tu experiencia!</p>';
+                return;
             }
-        }
-        
-        function agregarOpinionALista(opinion) {
-            const lista = document.getElementById('lista-opiniones');
-            
-            // Crear elemento de opinión
-            const opinionElement = document.createElement('div');
-            opinionElement.className = 'opinion-item';
-            
-            // Convertir puntuación numérica a estrellas
-            const estrellas = '⭐️'.repeat(opinion.puntuacion);
-            
-            opinionElement.innerHTML = `
-                <div class="opinion-cabecera">
-                    <span class="opinion-nombre">${opinion.nombre}</span>
-                    <span class="opinion-fecha">${opinion.fecha}</span>
-                    <span class="opinion-puntuacion">${estrellas}</span>
-                </div>
-                <p class="opinion-texto">${opinion.opinion}</p>
-            `;
-            
-            // Agregar al inicio de la lista
-            if (lista.firstChild) {
-                lista.insertBefore(opinionElement, lista.firstChild);
-            } else {
-                lista.appendChild(opinionElement);
-            }
-        }
-    </script>
+
+            const opiniones = [];
+            snapshot.forEach(childSnapshot => {
+                opiniones.unshift(childSnapshot.val());
+            });
+
+            opiniones.forEach(opinion => {
+                const estrellas = '⭐️'.repeat(opinion.puntuacion);
+                lista.innerHTML += `
+                    <div class="opinion-item">
+                        <div class="opinion-cabecera">
+                            <span class="opinion-nombre">${opinion.nombre}</span>
+                            <span class="opinion-fecha">${opinion.fecha}</span>
+                            <span class="opinion-puntuacion">${estrellas}</span>
+                        </div>
+                        <p class="opinion-texto">${opinion.opinion}</p>
+                    </div>
+                `;
+            });
+        });
+    }
+</script>
+    
 </body>
 </html>

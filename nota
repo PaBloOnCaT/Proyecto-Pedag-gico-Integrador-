@@ -1,0 +1,32 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDVxErF5ITmreDXnPPeMln8Ibvn5B3-RMk",
+  authDomain: "ice-cold-82fcf.firebaseapp.com",
+  databaseURL: "https://ice-cold-82fcf-default-rtdb.firebaseio.com",
+  projectId: "ice-cold-82fcf",
+  storageBucket: "ice-cold-82fcf.firebasestorage.app",
+  messagingSenderId: "322524641526",
+  appId: "1:322524641526:web:90e22b109c9f60bb8d94d7",
+  measurementId: "G-75M8K74FJZ"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+--
+{
+  "rules": {
+    "opiniones": {
+      ".read": "auth != null",  // Solo usuarios autenticados
+      ".write": "auth != null"
+    }
+  }
+}
